@@ -1,26 +1,72 @@
 require('dotenv').config();
 const express = require('express');
-const nodemailer = require('nodemailer');
-const fs = require('fs');
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const session = require('express-session');
 const path = require('path');
-const open = require('open').default;
-const fontkit = require('@pdf-lib/fontkit');
+const fs = require('fs');
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Session setup
+app.use(session({
+  secret: 'Maklunat customer', // tukar ni untuk production
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // kalau HTTPS, tukar true
+}));
+
+// Serve public HTML
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json({ limit: '10mb' }));
+
+// Login route
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const adminUser = process.env.ADMIN_USER;
+  const adminPass = process.env.ADMIN_PASS;
+
+  console.log("Login Attempt:", username, password);
+  console.log("ENV Credentials:", adminUser, adminPass);
+
+  if (
+    username.toLowerCase() === adminUser.toLowerCase() &&
+    password === adminPass
+  ) {
+    req.session.isAdmin = true;
+    console.log("✅ Login success");
+    return res.json({ success: true });
+  }
+
+  console.log("❌ Login failed");
+  res.json({ success: false });
+});
+
+// Protect admin route
+app.get('/admin', (req, res) => {
+  if (req.session.isAdmin) {
+    res.sendFile(path.join(__dirname,'views','admin.html'));
+  } else {
+    res.redirect('/login.html');
+  }
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login.html');
+  });
+});
+
+// Homepage
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
 
 function drawWrappedText(page, text, x, y, font, size, maxWidth, lineHeight = 12) {
   const words = text.split(' ');
@@ -666,7 +712,7 @@ app.get('/admin/list', (req, res) => {
 
 // ✅ Papar HTML
 app.get('/admin/view/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin-view.html'));
+  res.sendFile(path.join(__dirname, 'views', 'admin-view.html'));
 });
 
 // ✅ Data satu borang
@@ -771,10 +817,22 @@ app.post('/admin/property/:id', async (req, res) => {
   }
 });
 
-// ================== START SERVER =====================
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  const link = `http://localhost:${port}`;
-  console.log(`🚀 Server berjalan pada: ${link}`);
-  if (process.env.NODE_ENV !== 'production') open(link);
+app.use(session({
+  secret: 'unicorn-secret', // tukar ikut suka, tapi jangan share public
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Dummy admin credential (kau boleh upgrade nanti pakai DB)
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'password123';
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
+    req.session.isAdmin = true;
+    res.json({ success: true });
+  } else {
+    res.json({ success: false });
+  }
 });

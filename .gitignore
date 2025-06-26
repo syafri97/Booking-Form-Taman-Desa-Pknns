@@ -4,9 +4,6 @@ node_modules/
 # Ignore the output PDFs folder
 pdfs/
 
-# Ignore public folder
-public/
-
 # Ignore all .log files
 *.log
 
