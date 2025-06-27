@@ -8,8 +8,6 @@ const app = express();
 const { PDFDocument, rgb } = require('pdf-lib');
 const fontkit = require('fontkit');
 PDFDocument.prototype.registerFontkit(fontkit);
-const { PDFDocument } = require('pdf-lib');
-const fontkit = require('fontkit');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const transporter = nodemailer.createTransport({
