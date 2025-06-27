@@ -5,9 +5,13 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 const app = express();
+<<<<<<< HEAD
 const { PDFDocument, rgb } = require('pdf-lib');
 const fontkit = require('fontkit');
 PDFDocument.prototype.registerFontkit(fontkit);
+=======
+const { PDFDocument } = require('pdf-lib');
+>>>>>>> 0ebe611 (Update server.js)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const transporter = nodemailer.createTransport({
