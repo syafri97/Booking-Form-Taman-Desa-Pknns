@@ -724,7 +724,7 @@ app.get('/admin/list', (req, res) => {
 
 // ✅ Papar HTML
 app.get('/admin/view/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'admin-view.html'));
+  res.sendFile(path.join(__dirname, 'public', 'admin-view.html'));
 });
 
 // ✅ Data satu borang
