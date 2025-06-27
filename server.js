@@ -1,11 +1,23 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 const app = express();
+const { PDFDocument, rgb } = require('pdf-lib');
+const fontkit = require('fontkit');
+PDFDocument.prototype.registerFontkit(fontkit);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
 
 // Session setup
 app.use(session({
