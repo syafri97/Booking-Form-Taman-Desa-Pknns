@@ -1,16 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Body styling */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f9;
+    }
+
+    /* Centered container for the form */
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Logo styling */
+    .logo {
+      width: 120px; /* Adjust logo size */
+      margin-bottom: 20px;
+    }
+
+    /* Input fields styling */
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    /* Button styling */
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .login-container {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h2>Admin Login</h2>
-  <form id="loginForm">
-    <input type="text" id="username" placeholder="Username" required /><br>
-    <input type="password" id="password" placeholder="Password" required /><br>
-    <button type="submit">Login</button>
-  </form>
+  <div class="login-container">
+    <!-- Logo -->
+    <img src="logopknns.png" alt="Admin Logo" class="logo" />
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required /><br>
+      <input type="password" id="password" placeholder="Password" required /><br>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -30,8 +107,7 @@
       } else {
         alert('Login gagal. Sila cuba lagi.');
       }
-});
-
+    });
   </script>
 </body>
 </html>
