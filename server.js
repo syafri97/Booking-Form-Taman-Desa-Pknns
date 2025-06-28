@@ -679,7 +679,11 @@ generatedFiles.forEach(f => {
   if (f.includes('temp') && fs.existsSync(f)) {
     fs.unlinkSync(f);
   }
+  
 });
+
+}
+
 fs.unlinkSync(finalPath); // This should also be a generated file
 
 
