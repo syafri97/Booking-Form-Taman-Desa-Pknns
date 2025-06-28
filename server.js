@@ -673,10 +673,16 @@ async function generateAdminPdfAndSend(fullData) {
   });
 
   // Clean temp files
-  generatedFiles.forEach(f => {
-    if (f.includes('admin_') && fs.existsSync(f)) fs.unlinkSync(f);
-  });
-}
+ // Clean up (padam selepas backup) - Ensure only generated files are deleted
+generatedFiles.forEach(f => {
+  // Make sure only files in 'temp' directory are deleted
+  if (f.includes('temp') && fs.existsSync(f)) {
+    fs.unlinkSync(f);
+  }
+});
+fs.unlinkSync(finalPath); // This should also be a generated file
+
+
 
 // ================== ROUTES =====================
 
