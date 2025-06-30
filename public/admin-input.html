@@ -90,12 +90,21 @@
     <fieldset>
       <legend>💰 Harga & Rebat</legend>
 
-      <label for="hargaAsal">Harga Asal (RM)</label>
-      <select id="hargaAsal" name="hargaAsal" required>
-        <option value="">-- Pilih --</option>
-        <option value="250000">250,000</option>
-        <option value="450000">450,000</option>
-      </select>
+<label for="hargaAsalSelect">Harga Asal (RM)</label>
+<select id="hargaAsalSelect" name="hargaAsalSelect" required onchange="toggleHargaCustom(this)">
+  <option value="">-- Pilih --</option>
+  <option value="250000">250,000</option>
+  <option value="450000">450,000</option>
+  <option value="lain">Lain-lain</option>
+</select>
+
+<!-- Hidden input yang akan pegang nilai sebenar -->
+<input type="hidden" id="hargaAsal" name="hargaAsal">
+
+<div id="hargaCustomContainer" style="display:none; margin-top:8px;">
+  <input type="number" id="hargaCustomInput" placeholder="Masukkan harga sendiri (RM)" oninput="setHargaCustom(this)">
+</div>
+
 
       <label for="diskaunBumi">Diskaun Bumi (%)</label>
       <select id="diskaunBumi" name="diskaunBumi" required>

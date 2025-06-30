@@ -1,4 +1,3 @@
-
 // =================== URL PARAMS ===================
 const params = new URLSearchParams(window.location.search);
 const submissionId = params.get("id");
@@ -26,7 +25,6 @@ loadBuyerInfo(); // Auto run on load
 document.getElementById("propertyForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  // 🚀 Tunjuk loading spinner
   document.getElementById("loadingOverlay").style.display = "flex";
 
   const formData = new FormData(this);
@@ -65,6 +63,27 @@ document.getElementById("propertyForm").addEventListener("submit", async functio
     alert("❌ Ralat sambungan: " + err.message);
   }
 });
+// =================== HARGA CUSTOM ===================
+function toggleHargaCustom(select) {
+  const container = document.getElementById('hargaCustomContainer');
+  if (select.value === 'lain') {
+    container.style.display = 'block';
+    document.getElementById('hargaCustomInput').focus();
+    document.getElementById('hargaAsal').value = '';
+    triggerCalc();
+  } else {
+    container.style.display = 'none';
+    document.getElementById('hargaCustomInput').value = '';
+    document.getElementById('hargaAsal').value = select.value;
+    triggerCalc();
+  }
+}
+
+function setHargaCustom(input) {
+  const raw = input.value.replace(/[^\d]/g, '');
+  document.getElementById('hargaAsal').value = raw;
+  triggerCalc();
+}
 
 // =================== KALKULASI ===================
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,9 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const asal = parseFloat(hargaAsal.value) || 0;
     const dis = parseFloat(diskaun.value) || 0;
     const amaunDiskaun = asal * dis / 100;
-    jumlahDiskaun.value = amaunDiskaun.toFixed(2);
+    jumlahDiskaun.value = amaunDiskaun.toFixed(0);
     const hargaSPAVal = asal - amaunDiskaun;
-    hargaSPA.value = hargaSPAVal.toFixed(2);
+    hargaSPA.value = hargaSPAVal.toFixed(0);
     return hargaSPAVal;
   }
 
@@ -101,9 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const spa = kiraHargaSPA();
     const rebateVal = parseFloat(rebate.value) || 0;
     const amaunRebat = spa * rebateVal / 100;
-    jumlahRebat.value = amaunRebat.toFixed(2);
+    jumlahRebat.value = amaunRebat.toFixed(0);
     const hargaFinalVal = spa - amaunRebat;
-    hargaFinal.value = hargaFinalVal.toFixed(2);
+    hargaFinal.value = hargaFinalVal.toFixed(0);
   }
 
   luasStandard.addEventListener('input', kiraLuasJumlah);
@@ -122,3 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
   kiraHargaSPA();
   kiraHargaFinal();
 });
+
+// =================== TRIGGER KALKULASI ===================
+function triggerCalc() {
+  const hargaAsal = document.getElementById('hargaAsal');
+  const event = new Event('input', { bubbles: true });
+  hargaAsal.dispatchEvent(event);
+}
