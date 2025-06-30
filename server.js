@@ -590,7 +590,7 @@ console.log('✅ Dah tulis database.json');
     fs.copyFileSync(finalPath, archivePath); // Simpan salinan dahulu
 
     // Clean up (padam selepas backup)
-generatedFiles.forEach(f => {
+  generatedFiles.forEach(f => {
   if (f.includes(path.join(__dirname, 'temp')) && fs.existsSync(f)) {
     fs.unlinkSync(f);
   }
