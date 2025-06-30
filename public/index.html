@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking Borang - Taman Desa PKNNS</title>
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
@@ -25,14 +26,23 @@
     <form id="bookingForm">
 
       <!-- Utama -->
-      <label>Nama Penuh</label><input type="text" name="customerName" required />
-      <label>IC</label><input type="text" name="customerIc" required />
-      <label>Alamat</label><textarea name="customerAddress" rows="3" required></textarea>
-      <label>Telefon</label><input type="text" name="customerPhone" required />
-      <label>Jawatan</label><input type="text" name="customerPosition" required />
+      <label for="customerName">Nama Penuh</label>
+      <input id="customerName" type="text" name="customerName" placeholder="Nama Penuh" required />
 
-      <label>Bangsa</label>
-      <select name="customerRace" id="customerRace" required>
+      <label for="customerIc">IC</label>
+      <input id="customerIc" type="text" name="customerIc" placeholder="No. Kad Pengenalan" required />
+
+      <label for="customerAddress">Alamat</label>
+      <textarea id="customerAddress" name="customerAddress" rows="3" placeholder="Alamat penuh" required></textarea>
+
+      <label for="customerPhone">Telefon</label>
+      <input id="customerPhone" type="text" name="customerPhone" placeholder="Nombor Telefon" required />
+
+      <label for="customerPosition">Jawatan</label>
+      <input id="customerPosition" type="text" name="customerPosition" placeholder="Jawatan" required />
+
+      <label for="customerRace">Bangsa</label>
+      <select id="customerRace" name="customerRace" required>
         <option value="">-- Sila Pilih --</option>
         <option value="Melayu">Melayu</option>
         <option value="Cina">Cina</option>
@@ -41,7 +51,9 @@
       </select>
       <input type="text" id="customerRaceOther" name="customerRaceOther" placeholder="Nyatakan Bangsa" class="hidden" />
 
-      <label>Emel</label><input type="email" name="customerEmail" required />
+    <label for="customerEmail">Emel</label>
+    <input id="customerEmail" type="email" name="customerEmail" placeholder="Alamat Emel" required />
+
 
       <label>Tandatangan Pemohon Utama</label>
       <canvas id="signatureMain" class="signature-pad"></canvas>

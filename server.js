@@ -551,7 +551,12 @@ app.post('/submitBooking', async (req, res) => {
 
     const dbPath = path.join(__dirname, 'submitBooking', 'database.json');
 let db = [];
-if (fs.existsSync(dbPath)) db = JSON.parse(fs.readFileSync(dbPath));
+if (fs.existsSync(dbPath)) {
+  const fileContent = fs.readFileSync(dbPath, 'utf8');
+  if (fileContent.trim()) {
+    db = JSON.parse(fileContent);
+  }
+}
 
 const newId = db.length > 0 ? Math.max(...db.map(item => item.id || 0)) + 1 : 1;
 
@@ -572,7 +577,9 @@ const newRecord = {
 };
 
 db.push(newRecord);
+console.log('✅ Nak tulis database:', newRecord);
 fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+console.log('✅ Dah tulis database.json');
 
     // Simpan salinan PDF ke dalam folder archive sebelum padam
     const archiveDir = path.join(__dirname, 'submitBooking', 'archive');

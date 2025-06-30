@@ -243,6 +243,11 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
+<div id="loadingOverlay" style="display:none;">
+  <div class="spinner"></div>
+  <p style="margin-top: 10px; font-weight: bold;">Sila tunggu... PDF sedang dijana</p>
+</div>
+
 setupSignaturePad(document.getElementById('signatureMain'));
 enableDrawing(document.getElementById('signatureMain'));
 updateCoapplicantList();
