@@ -1,9 +1,6 @@
 # Ignore node_modules folder
 node_modules/
 
-# Ignore the output PDFs folder
-pdfs/
-
 # Ignore all .log files
 *.log
 
