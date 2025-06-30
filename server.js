@@ -711,7 +711,9 @@ app.post('/admin/generate-pdf/:id', async (req, res) => {
     if (recordIndex === -1) return res.status(404).json({ message: "Rekod tidak ditemui." });
 
     db[recordIndex].property = propertyData;
+    db[recordIndex].status = 'admin update'; // atau 'updated' ikut suka kau
     fs.writeFileSync(databasePath, JSON.stringify(db, null, 2));
+
 
     const fullData = {
       ...propertyData,
