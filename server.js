@@ -453,6 +453,7 @@ app.post('/submitBooking', async (req, res) => {
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
     const generatedFiles = [];
+    const staticFiles = [];
 
     for (const templatePath of requiredTemplates) {
       const filledPdfBytes = await generateFilledPdf(templatePath, {
@@ -631,6 +632,7 @@ async function generateAdminPdfAndSend(fullData) {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
   const generatedFiles = [];
+  const staticFiles = [];
 
   for (const template of templates) {
     const filled = await generateFilledPdf(template, {
