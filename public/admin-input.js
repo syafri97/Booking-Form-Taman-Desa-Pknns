@@ -2,29 +2,40 @@
 const params = new URLSearchParams(window.location.search);
 const submissionId = params.get("id");
 
+// =================== GLOBAL BUYER DATA ===================
+let buyerData = {};
+
 // =================== PAPAR MAKLUMAT PEMBELI ===================
 async function loadBuyerInfo() {
-  if (!submissionId) return;
-
   try {
     const res = await fetch(`/admin/data/${submissionId}`);
     if (!res.ok) throw new Error("Gagal dapatkan data.");
 
     const data = await res.json();
+    buyerData = data; // Simpan supaya boleh hantar ke server
+
     document.getElementById("buyerName").textContent = data.customerName || "-";
     document.getElementById("buyerIC").textContent = data.customerIc || "-";
     document.getElementById("buyerEmail").textContent = data.customerEmail || "-";
   } catch (err) {
     console.error("❌ Ralat paparkan maklumat pembeli:", err.message);
+    alert("❌ Gagal dapatkan maklumat pembeli.");
+  } finally {
+    document.getElementById("loadingOverlay").style.display = "none";
   }
 }
 
-loadBuyerInfo(); // Auto run on load
+// =================== SEMAK ID & AUTO LOAD ===================
+if (!submissionId) {
+  alert("❌ Ralat: ID borang tidak dijumpai dalam URL.");
+  document.getElementById("loadingOverlay").style.display = "none";
+} else {
+  loadBuyerInfo(); // Run only if ID is valid
+}
 
 // =================== SUBMIT FORM ===================
 document.getElementById("propertyForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-
   document.getElementById("loadingOverlay").style.display = "flex";
 
   const formData = new FormData(this);
@@ -38,6 +49,17 @@ document.getElementById("propertyForm").addEventListener("submit", async functio
       payload[key] = value;
     }
   });
+
+  // 🔥 Tambah field dari buyerData
+  payload.customerName = buyerData.customerName;
+  payload.customerIc = buyerData.customerIc;
+  payload.customerEmail = buyerData.customerEmail;
+  payload.customerPhone = buyerData.customerPhone;
+  payload.customerPosition = buyerData.customerPosition;
+  payload.customerAddress = buyerData.customerAddress;
+  payload.customerRace = buyerData.customerRace;
+
+  console.log("📤 Payload Dihantar:", payload);
 
   try {
     const res = await fetch(`/admin/generate-pdf/${submissionId}`, {
@@ -63,6 +85,13 @@ document.getElementById("propertyForm").addEventListener("submit", async functio
     alert("❌ Ralat sambungan: " + err.message);
   }
 });
+
+// Timeout 10 saat kalau server lambat
+setTimeout(() => {
+  document.getElementById("loadingOverlay").style.display = "none";
+  alert("⛔ Server ambil masa terlalu lama. Sila cuba semula.");
+}, 10000);
+
 // =================== HARGA CUSTOM ===================
 function toggleHargaCustom(select) {
   const container = document.getElementById('hargaCustomContainer');

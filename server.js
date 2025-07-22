@@ -422,8 +422,8 @@ function drawAdminFieldsBorang2(page, data, mm, font) {
 
 const dokumen = data.dokumen || [];
 if (dokumen.includes('SPA')) page.drawText('X', { x: 54 * mm, y: 120.5 * mm, size: 12, font });
-if (dokumen.includes('MOT')) page.drawText('X', { x: 54 * mm, y: 112.5 * mm, size: 12, font });
-if (dokumen.includes('Bank')) page.drawText('X', { x: 54 * mm, y: 104.5 * mm, size: 12, font });
+if (dokumen.includes('MOT')) page.drawText('X', { x: 54 * mm, y: 104.5 * mm, size: 12, font });
+if (dokumen.includes('Bank')) page.drawText('X', { x: 54 * mm, y: 112.5 * mm, size: 12, font });
 if (dokumen.includes('MOC')) page.drawText('X', { x: 54 * mm, y: 96.4 * mm, size: 12, font });
 
 }
@@ -717,15 +717,20 @@ app.post('/admin/generate-pdf/:id', async (req, res) => {
     if (recordIndex === -1) return res.status(404).json({ message: "Rekod tidak ditemui." });
 
     db[recordIndex].property = propertyData;
-    db[recordIndex].status = 'admin update'; // atau 'updated' ikut suka kau
+    db[recordIndex].status = 'admin update';
     fs.writeFileSync(databasePath, JSON.stringify(db, null, 2));
-
 
     const fullData = {
       ...propertyData,
       ...db[recordIndex],
       property: propertyData
     };
+
+    console.log("📦 Data diterima dari admin:");
+    console.log(propertyData);
+
+    console.log("✅ Data gabungan dari admin + rekod:");
+    console.log(fullData);
 
     await generateAdminPdfAndSend(fullData);
     res.status(200).json({ message: "PDF berjaya dijana & dihantar." });
@@ -734,6 +739,7 @@ app.post('/admin/generate-pdf/:id', async (req, res) => {
     res.status(500).json({ message: "Ralat menjana PDF.", error: err.message });
   }
 });
+
 
 // ✅ Senarai borang
 app.get('/admin/list', (req, res) => {
