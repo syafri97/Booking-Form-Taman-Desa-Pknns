@@ -55,7 +55,7 @@ app.post('/login', (req, res) => {
 // Protect admin route
 app.get('/admin', (req, res) => {
   if (req.session.isAdmin) {
-    res.sendFile(path.join(__dirname,'views','admin.html'));
+    res.sendFile(path.join(__dirname,'public','admin.html'));
   } else {
     res.redirect('/login.html');
   }
