@@ -8,16 +8,20 @@ const app = express();
 const { PDFDocument, rgb } = require('pdf-lib');
 const fontkit = require('fontkit');
 PDFDocument.prototype.registerFontkit(fontkit);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Nodemailer setup (guna Gmail App Password)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.EMAIL_USER, // email Gmail
+    pass: process.env.EMAIL_PASS  // app password (16 char, bukan password biasa)
   }
 });
-
 
 // Session setup
 app.use(session({
@@ -55,7 +59,8 @@ app.post('/login', (req, res) => {
 // Protect admin route
 app.get('/admin', (req, res) => {
   if (req.session.isAdmin) {
-    res.sendFile(path.join(__dirname,'public','admin.html'));
+    // FIX: admin.html sekarang dalam folder public, bukan views
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
   } else {
     res.redirect('/login.html');
   }
